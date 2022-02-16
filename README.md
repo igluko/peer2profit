@@ -17,6 +17,7 @@ Set proxy settings:
 ```
 nano  /root/peer2profit/proxychains.conf
 ```
+- You must pass correct proxy settings
 ```
 ...
 [ProxyList]
