@@ -6,4 +6,4 @@ RUN apt update \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
 
-CMD ["/bin/sh","-c","proxychains p2pclient -l lbblackfish@gmail.com"]
+CMD ["/bin/sh","-c","proxychains p2pclient -l $P2P_EMAIL"]
