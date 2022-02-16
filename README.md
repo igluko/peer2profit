@@ -24,8 +24,10 @@ socks5         1.2.3.4 5841 user password
 ```
 
 Start One container:
+- You must pass correct P2P_EMAIL
+- You must pass correct proxychains.conf
 ```
-docker run -d --restart unless-stopped -e "P2P_EMAIL=lbblackfish@gmail.com" \
+docker run -d --restart unless-stopped -e "P2P_EMAIL=some-email@some-server.com" \
 -v "/root/peer2profit/proxychains.conf:/etc/proxychains.conf" peer2profit
 ```
 
