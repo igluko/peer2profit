@@ -10,21 +10,12 @@ apt upgrade -y && \
 apt install docker docker-compose git -y && \
 git clone https://github.com/igluko/peer2profit.git && \
 cd peer2profit && \
-docker build . -t peer2profit
+docker build . -t peer2profit \
 ```
 
-Edit proxychains.conf
-- You must pass correct proxy settings
+Run container
 ```
-nano  /root/peer2profit/proxychains.conf
-```
-
-Start One container:
-- You must pass correct P2P_EMAIL
-- You must pass correct proxychains.conf
-```
-docker run -d --restart unless-stopped -e "P2P_EMAIL=some-email@some-server.com" \
--v "/root/peer2profit/proxychains.conf:/etc/proxychains.conf" peer2profit
+run
 ```
 
 Get containers list:
