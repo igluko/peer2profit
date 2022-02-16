@@ -13,15 +13,10 @@ cd peer2profit && \
 docker build . -t peer2profit
 ```
 
-Set proxy settings:
-```
-nano  /root/peer2profit/proxychains.conf
-```
+Edit proxychains.conf
 - You must pass correct proxy settings
 ```
-...
-[ProxyList]
-socks5         1.2.3.4 5841 user password
+nano  /root/peer2profit/proxychains.conf
 ```
 
 Start One container:
