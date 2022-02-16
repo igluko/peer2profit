@@ -13,14 +13,14 @@ if [ -f ".env" ]; then
     EMAIL=`cat .env | xargs`
 fi
 # get email from stdin
-read -e -p "Enter your email: " -i $EMAIL EMAIL
+read -e -p "Enter your email:   " -i $EMAIL EMAIL
 printf "[$OK] email saved \n"
 
 PROXY="user:password@1.2.3.4:5841"
 
 while true; do
     # get proxy from stdin
-    read -e -p "Enter proxy settings: " -i $PROXY PROXY
+    read -e -p "Enter proxy settings:   " -i $PROXY PROXY
     # parse PROXY
     eval 'echo $PROXY | tr "@" "\n" | tr ":" "\n" | wc -l | grep -qw 4'
     ret=$?  
@@ -28,6 +28,7 @@ while true; do
         printf "[$OK] PROXY $PROXY is valid \n"
     else
         printf "[$FAIL] string <$PROXY> does not look like string <user:password@1.2.3.4:5841> \n"
+        PROXY="user:password@1.2.3.4:5841"
         continue
     fi
     USER=$(echo $PROXY | tr "@" "\n" | tr ":" "\n" | sed -n '1p')
@@ -45,7 +46,6 @@ while true; do
     fi
     # update config
     `echo "socks5         $IP $PORT $USER $PASSWORD" >> proxychains_$IP.conf`
-    echo "ret $ret"
     if [ $ret -eq 0 ]; then
         printf "[$OK] proxychains_$IP.conf update \n"
     else
@@ -64,7 +64,7 @@ while true; do
     echo "-----"
     #  start another?
     while true; do
-        read -e -p "Start another container (y/n)? " -i "y" -r
+        read -e -p "Start another container (y/n)?   " -i "" -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]
         then
