@@ -1,0 +1,67 @@
+#!/bin/bash
+
+#https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
+#printf "I ${RED}love${NC} Stack Overflow\n"
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+OK="${GREEN}ok${NC}"
+FAIL="${RED}fail${NC}"
+
+# try to read preconfigured email from .env file
+if [ -f ".env" ]; then
+    EMAIL=`cat .env | xargs`
+fi
+# get email from stdin
+read -e -p "Enter your email: " -i $EMAIL EMAIL
+printf "[$OK] email saved \n"
+
+PROXY="user:password@1.2.3.4:5841"
+
+while true; do
+    # get proxy from stdin
+    read -e -p "Enter proxy settings: " -i $PROXY PROXY
+    # parse PROXY
+    eval 'echo $PROXY | tr "@" "\n" | tr ":" "\n" | wc -l | grep -qw 4'
+    ret=$?  
+    if [ $ret -eq 0 ]; then
+        printf "[$OK] PROXY $PROXY is valid \n"
+    else
+        printf "[$FAIL] string <$PROXY> does not look like string <user:password@1.2.3.4:5841> \n"
+        continue
+    fi
+    USER=$(echo $PROXY | tr "@" "\n" | tr ":" "\n" | sed -n '1p')
+    PASSWORD=$(echo $PROXY | tr "@" "\n" | tr ":" "\n" | sed -n '2p')
+    IP=$(echo $PROXY | tr "@" "\n" | tr ":" "\n" | sed -n '3p')
+    PORT=$(echo $PROXY | tr "@" "\n" | tr ":" "\n" | sed -n '4p')
+    # copy config
+    eval "rm -f proxychains_$IP.conf; cp proxychains.conf proxychains_$IP.conf"
+    ret=$?  
+    if [ $ret -eq 0 ]; then
+        printf "[$OK] proxychains_$IP.conf create \n"
+    else
+        printf "[$FAIL] proxychains_$IP.conf create \n"
+        exit
+    fi
+    # update config
+    `echo "socks5         $IP $PORT $USER $PASSWORD" >> proxychains_$IP.conf`
+    echo "ret $ret"
+    if [ $ret -eq 0 ]; then
+        printf "[$OK] proxychains_$IP.conf update \n"
+    else
+        printf "[$FAIL] proxychains_$IP.conf update \n"
+        exit
+    fi
+    # docker run
+    #echo "docker run -d --restart unless-stopped -e \"P2P_EMAIL=$EMAIL\" -v /root/peer2profit/proxychains_$IP.conf:/etc/proxychains.conf peer2profit"
+    eval "docker run -d --restart unless-stopped -e \"P2P_EMAIL=$EMAIL\" -v /root/peer2profit/proxychains_$IP.conf:/etc/proxychains.conf peer2profit"
+    ret=$?
+    if [ $ret -eq 0 ]; then
+        printf "[$OK] Run docker container wia proxy $IP \n"
+    else
+        printf "[$FAIL] Run docker container wia proxy $IP \n"
+        exit
+    fi
+    echo "-----"
+done
+
