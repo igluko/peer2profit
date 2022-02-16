@@ -42,9 +42,11 @@ Get logs by id:
 docker logs a8dd1ae1afc4
 ```
 ```
+...
 2022-02-15T14:54:35Z | Configuration received successfully.
 2022-02-15T14:54:35Z | External interface IP: 172.17.0.2, DNS: 8.8.8.8
 2022-02-15T14:54:35Z | Service started.
+...
 ```
 Done.
 
