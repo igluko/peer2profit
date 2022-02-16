@@ -53,7 +53,6 @@ while true; do
         exit
     fi
     # docker run
-    #echo "docker run -d --restart unless-stopped -e \"P2P_EMAIL=$EMAIL\" -v /root/peer2profit/proxychains_$IP.conf:/etc/proxychains.conf peer2profit"
     eval "docker run -d --restart unless-stopped -e \"P2P_EMAIL=$EMAIL\" -v /root/peer2profit/proxychains_$IP.conf:/etc/proxychains.conf peer2profit"
     ret=$?
     if [ $ret -eq 0 ]; then
@@ -63,5 +62,18 @@ while true; do
         exit
     fi
     echo "-----"
+    #  start another?
+    while true; do
+        read -e -p "Start another container (y/n)? " -i "y" -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+            break
+        fi
+        if [[ $REPLY =~ ^[Nn]$ ]]
+        then
+            printf "[$OK] Exit \n"
+            exit 0
+        fi
+    done
 done
-
