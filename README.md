@@ -18,6 +18,7 @@ Set proxy settings:
 nano  /root/peer2profit/proxychains.conf
 ```
 ```
+...
 [ProxyList]
 socks5         1.2.3.4 5841 user password
 ```
